@@ -1,6 +1,8 @@
 require 'bundler'
 Bundler.require
 
+require 'csv'
+
 # Enum
 Dir[File.expand_path("../enumerations/", __FILE__) << '/*.rb'].each do |file|
   require file
@@ -29,9 +31,12 @@ if __FILE__ == $0
   # 全カードデータ生成
   service = CardsService.create
   service.create_cards
+  # service.export_cards
 
-  #
-  # service = DeckService.create
+  # コレクション生成
+  service = CollectionService.create
+  # service.create_collection
+  service.export_list
 
   # binding.pry
   all = Card.count.tapp

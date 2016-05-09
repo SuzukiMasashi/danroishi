@@ -5,6 +5,9 @@ class Card < Model
   include RaceEnumerations
   include RarityEnumerations
 
+  has_many :collection_cards
+  has_many :collections, through: :collection_cards
+
   attr_accessor :code,
                 :cost,
                 :name,
