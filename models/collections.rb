@@ -3,5 +3,6 @@ class Collection < Model
   has_many :cards, through: :collection_cards
 
   attr_accessor :card_sets,
+                :card_class,
                 :highlander
 end

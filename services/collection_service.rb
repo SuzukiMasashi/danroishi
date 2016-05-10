@@ -1,14 +1,15 @@
 class CollectionService
   class << self
     def create
-      new(ENV['CARD_SETS'], ENV['HiGHLANDER'])
+      new(ENV['CARD_SETS'], ENV['HERO'], ENV['HIGHLANDER'])
     end
   end
 
-  def initialize(card_sets, highlander)
+  def initialize(card_sets, card_class, highlander)
     @card_sets  = card_sets.split(',')
+    @card_class = card_class.split(',').push('NEUTRAL')
     @highlander = highlander
-    @collection = Collection.create(card_sets: card_sets, highlander: highlander?)
+    @collection = Collection.create(card_sets: card_sets, card_class: @card_class, highlander: highlander?)
   end
 
   def highlander?
@@ -31,7 +32,7 @@ class CollectionService
     delete_cards
 
     Card.each do |card|
-      next unless @card_sets.include?(card.card_set)
+      next unless @card_sets.include?(card.card_set) && @card_class.include?(card.card_class)
 
       CollectionCard.create(
         collection_id: @collection.id,
@@ -59,6 +60,6 @@ class CollectionService
   private
 
   def export_headers
-    %i(card_class cost name)
+    %i(card_class rarity cost name)
   end
 end
