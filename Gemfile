@@ -7,6 +7,8 @@ gem "passive_record"
 gem "enumerize"
 gem "dotenv"
 
+gem "activesupport"
+
 gem "pry"
 gem "byebug"
 gem "pry-byebug"
