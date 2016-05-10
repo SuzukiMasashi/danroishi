@@ -1,4 +1,4 @@
-module RaceEnumerations
+module RaceEnumeration
   extend Enumerize
 
   enumerize :race, in: {

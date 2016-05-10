@@ -1,9 +1,9 @@
 class Card < Model
-  include CardClassEnumerations
-  include CardSetEnumerations
-  include CardTypeEnumerations
-  include RaceEnumerations
-  include RarityEnumerations
+  include CardClassEnumeration
+  include CardSetEnumeration
+  include CardTypeEnumeration
+  include RaceEnumeration
+  include RarityEnumeration
 
   has_many :collection_cards
   has_many :collections, through: :collection_cards

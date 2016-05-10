@@ -1,4 +1,4 @@
-module CardClassEnumerations
+module CardClassEnumeration
   extend Enumerize
 
   enumerize :card_class, in: {

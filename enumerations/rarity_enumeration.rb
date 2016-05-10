@@ -1,4 +1,4 @@
-module RarityEnumerations
+module RarityEnumeration
   extend Enumerize
 
   enumerize :rarity, in: {

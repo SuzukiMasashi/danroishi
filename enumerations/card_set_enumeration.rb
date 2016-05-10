@@ -1,4 +1,4 @@
-module CardSetEnumerations
+module CardSetEnumeration
   extend Enumerize
 
   enumerize :card_set, in: {

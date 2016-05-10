@@ -1,5 +1,5 @@
 class CardSet
-  include CardSetEnumerations
+  include CardSetEnumeration
 
   class << self
     def disabled_sets
