@@ -38,10 +38,15 @@ if __FILE__ == $0
   # service.create_collection
   service.export_list
 
-  # binding.pry
-  all = Card.count.tapp
-  disabled = Card.where(card_set: CardSet.disabled_sets).count.tapp
-  out_of = Card.where(card_set: CardSet.out_of_sets).count.tapp
-  standard = Card.where(card_set: CardSet.standard).count.tapp
-  CardClass.hero.tapp
+  # デッキ生成
+  service = DeckService.create(service.collection)
+  service.create_deck
+
+  # レギュレーションチェック
+  if service.valid?
+    "OK！デッキに問題ありませんでした。".tapp
+    service.export_deck
+  else
+    "デッキにレギュレーション違反がありました。".tapp
+  end
 end
