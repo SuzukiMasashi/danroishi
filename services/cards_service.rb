@@ -7,12 +7,14 @@ class CardsService
     private
 
     def cards_json_url
+      Dotenv.load ".env.api"
+
       [
-        ENV['API_HOSTNAME'],
-        ENV['API_VERSION'],
-        ENV['API_VERSION_LATEST_DIR'],
-        ENV['API_LANGUAGE'],
-        ENV['CARDS_COLLECTIBLE_JSON']
+        ENV["API_HOSTNAME"],
+        ENV["API_VERSION"],
+        ENV["API_VERSION_LATEST_DIR"],
+        ENV["API_LANGUAGE"],
+        ENV["CARDS_COLLECTIBLE_JSON"]
       ].join("/")
     end
 

@@ -2,7 +2,7 @@ class Collection < Model
   has_many :collection_cards
   has_many :cards, through: :collection_cards
 
-  attr_accessor :card_sets,
+  attr_accessor :card_set,
                 :card_class,
                 :highlander
 

@@ -1,17 +1,35 @@
 class CollectionService
   class << self
     def create
-      new(ENV["CARD_SETS"], ENV["HERO"], ENV["HIGHLANDER"])
+      Dotenv.load ".env.collection"
+
+      card_set   = ENV["CARD_SET"].tr(" ", "")
+
+      card_class =
+        if ENV["CARD_CLASS"].present?
+          ENV["CARD_CLASS"]
+        else
+          "NEUTRAL,DRUID,HUNTER,MAGE,PALADIN,PRIEST,ROGUE,SHAMAN,WARLOCK,WARRIOR"
+        end
+
+      header               = ENV["HEADER"].tr(" ", "")
+      highlander           = ENV["HIGHLANDER"].squish
+      collection_file_path = ENV["COLLECTION_FILE_PATH"].squish
+
+      new(card_set, card_class, header, highlander, collection_file_path)
     end
   end
 
   attr_reader :collection
 
-  def initialize(card_sets, card_class, highlander)
-    @card_sets  = card_sets.split(",")
-    @card_class = card_class.split(",").push("NEUTRAL")
-    @highlander = highlander
-    @collection = Collection.create(card_sets: card_sets, card_class: @card_class, highlander: highlander?)
+  def initialize(card_set, card_class, header, highlander, collection_file_path)
+    @card_sets            = card_set.split(",")
+    @card_classes         = card_class.split(",")
+    @headers              = header.split(",").map(&:to_sym)
+    @highlander           = highlander.inquiry.true?
+    @collection_file_path = collection_file_path
+
+    @collection = Collection.create(card_set: card_set, card_class: card_class, highlander: highlander?)
   end
 
   def highlander?
@@ -34,7 +52,7 @@ class CollectionService
     delete_cards
 
     Card.each do |card|
-      next unless @card_sets.include?(card.card_set) && @card_class.include?(card.card_class)
+      next unless @card_sets.include?(card.card_set) && @card_classes.include?(card.card_class)
 
       CollectionCard.create(
         collection_id: @collection.id,
@@ -44,24 +62,18 @@ class CollectionService
     end
   end
 
-  def export_list
+  def export_collection
     if @collection.cards.count.zero?
       create_collection
     end
 
-    CSV.open("list.csv", "wb", headers: export_headers, write_headers: true) do |csv|
+    CSV.open(@collection_file_path, "wb", headers: @headers + [:quantity], write_headers: true) do |csv|
       @collection.collection_cards.each do |collection_card|
-        card_params = collection_card.card.to_h.values_at(*(export_headers - [:quantity]))
+        card_params = collection_card.card.to_h.values_at(*@headers)
         quantity    = collection_card.quantity
 
         csv << card_params.push(quantity)
       end
     end
-  end
-
-  private
-
-  def export_headers
-    DeckCard.export_headers
   end
 end

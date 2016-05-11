@@ -1,7 +1,8 @@
+require 'active_support'
+require 'active_support/core_ext'
+require 'csv'
 require 'bundler'
 Bundler.require
-
-require 'csv'
 
 # Enum
 Dir[File.expand_path("../enumerations/", __FILE__) << '/*.rb'].each do |file|
@@ -25,7 +26,6 @@ end
 
 # main
 if __FILE__ == $0
-  Dotenv.load ".env.api"
   Dotenv.load ".env"
 
   # 全カードデータ生成
@@ -36,7 +36,7 @@ if __FILE__ == $0
   # コレクション生成
   service = CollectionService.create
   # service.create_collection
-  service.export_list
+  service.export_collection
 
   # デッキ生成
   service = DeckService.create(service.collection)
