@@ -12,7 +12,7 @@ class CollectionService
           "NEUTRAL,DRUID,HUNTER,MAGE,PALADIN,PRIEST,ROGUE,SHAMAN,WARLOCK,WARRIOR"
         end
 
-      header               = ENV["HEADER"].tr(" ", "")
+      header               = ENV["COLLECTION_HEADER"].tr(" ", "")
       highlander           = ENV["HIGHLANDER"].squish
       collection_file_path = ENV["COLLECTION_FILE_PATH"].squish
 
