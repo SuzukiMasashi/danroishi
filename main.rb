@@ -30,8 +30,8 @@ if __FILE__ == $0
 
   # 全カードデータ生成
   service = CardsService.create
-  service.create_cards
-  # service.export_cards
+  # service.create_cards
+  service.export_cards
 
   # コレクション生成
   service = CollectionService.create

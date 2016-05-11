@@ -1,13 +1,17 @@
 class CardsService
   class << self
     def create
-      new(fetch_cards_json)
+      Dotenv.load ".env.api"
+
+      header          = ENV["CARDS_HEADER"].tr(" ", "")
+      cards_file_path = ENV["CARDS_FILE_PATH"].squish
+
+      new(fetch_cards_json, header, cards_file_path)
     end
 
     private
 
     def cards_json_url
-      Dotenv.load ".env.api"
 
       [
         ENV["API_HOSTNAME"],
@@ -28,8 +32,16 @@ class CardsService
     end
   end
 
-  def initialize(json)
-    @cards = JSON.load(json)
+  def initialize(json, header, cards_file_path)
+    @cards           = JSON.load(json).reject {|card| card["type"] == "HERO" }
+    @headers         = header.split(",").map(&:to_sym)
+    @cards_file_path = cards_file_path
+  end
+
+  def sorted_cards
+    @cards.sort_by do |card|
+      [card["playerClass"] || "", card["cost"], card["set"], card["rarity"], card["name"]]
+    end
   end
 
   def delete_cards
@@ -39,21 +51,21 @@ class CardsService
   def create_cards
     delete_cards
 
-    @cards.each do |card|
+    sorted_cards.each do |card|
       Card.create(
-        code:        card['id'],
-        cost:        card['cost'],
-        name:        card['name'],
-        card_class:  card['playerClass'] || 'NEUTRAL',
-        card_set:    card['set'],
-        card_type:   card['type'],
-        race:        card['race'],
-        rarity:      card['rarity'],
-        collectible: card['collectible'],
-        card_text:   card['text'],
-        attack:      card['attack'],
-        health:      card['health'],
-        durability:  card['durability'],
+        code:        card["id"],
+        cost:        card["cost"],
+        name:        card["name"],
+        card_class:  card["playerClass"] || "NEUTRAL",
+        card_set:    card["set"],
+        card_type:   card["type"],
+        race:        card["race"],
+        rarity:      card["rarity"],
+        collectible: card["collectible"],
+        card_text:   card["text"].present? ? card["text"].tr("\n", "") : "",
+        attack:      card["attack"],
+        health:      card["health"],
+        durability:  card["durability"],
       )
     end
   end
@@ -63,16 +75,10 @@ class CardsService
       create_cards
     end
 
-    CSV.open("cards.csv", "wb", headers: export_headers, write_headers: true) do |csv|
+    CSV.open(@cards_file_path, "wb", headers: @headers, write_headers: true) do |csv|
       Card.each do |card|
-        csv << card.to_h.values_at(*export_headers)
+        csv << card.to_h.values_at(*@headers)
       end
     end
-  end
-
-  private
-
-  def export_headers
-    %i(cost name card_class card_set card_type race rarity card_text attack health durability)
   end
 end
