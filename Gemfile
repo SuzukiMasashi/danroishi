@@ -7,11 +7,12 @@ gem "passive_record"
 gem "enumerize"
 gem "dotenv"
 
+gem "highline"
+
 gem "activesupport"
 
 gem "pry"
 gem "byebug"
 gem "pry-byebug"
 
-gem "awesome_print"
-gem "tapp"
+gem "tapp-awesome_print"
