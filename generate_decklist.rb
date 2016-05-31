@@ -129,8 +129,9 @@ if __FILE__ == $0
               end
 
   # デッキリスト出力
-  epoch = Time.now.to_i
-  usec  = Time.now.usec
+  current_time = Time.now
+  epoch        = current_time.to_i
+  usec         = current_time.usec
   File.open("#{epoch}+#{usec}.csv", "w+") do |fp|
     deck_list.each do |card|
       fp.puts card.to_csv
