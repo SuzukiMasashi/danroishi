@@ -3,7 +3,7 @@ class CollectionService
     def create
       Dotenv.load ".env.collection"
 
-      card_set   = ENV["CARD_SET"].tr(" ", "")
+      card_set   = ENV["COLLECTION_CARD_SET"].tr(" ", "")
 
       card_class =
         if ENV["CARD_CLASS"].present?
