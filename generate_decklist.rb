@@ -28,6 +28,7 @@ end
 if __FILE__ == $0
   MANA_COST_RANGE  = 0..25
   HIGHLANDER       = false
+  HEROES           = %w(DRUID HUNTER MAGE PALADIN PRIEST ROGUE SHAMAN WARLOCK WARRIOR)
   LIMIT_DECK_QTY   = 30
   LIMIT_CARD_QTY   = HIGHLANDER ? (1..1) : (1..2)
 
@@ -38,15 +39,33 @@ if __FILE__ == $0
   service = CardsService.create
   service.create_cards
 
+  # ヒーロー選択
+
+  hero = cli.choose do |menu|
+    menu.echo    = true
+    menu.prompt  = "ヒーローは？  "
+    menu.choice("** ヒーロー未選択 **")
+    menu.choices(*HEROES)
+  end
+  cli.say("[#{hero}]を選択しました。")
+
   # カード選択
   cards = 1.upto(LIMIT_DECK_QTY).map do |n|
     # カードセット
     # クエリを実行すると破壊的に更新されてしまうため都度カードを抽出する
-    relations =[
-      Card.where(card_set: "CORE"),
-      Card.where(card_set: "EXPERT1").where(rarity: %w(COMMON RARE)),
-      Card.where(card_set: "OG")
-    ]
+    relations = if hero == "** ヒーロー未選択 **"
+                  [
+                    Card.where(card_set: "CORE"),
+                    Card.where(card_set: "EXPERT1").where(rarity: %w(COMMON RARE)),
+                    Card.where(card_set: "OG")
+                  ]
+                else
+                  [
+                    Card.where(card_class: [hero, "NEUTRAL"]).where(card_set: "CORE"),
+                    Card.where(card_class: [hero, "NEUTRAL"]).where(card_set: "EXPERT1").where(rarity: %w(COMMON RARE)),
+                    Card.where(card_class: [hero, "NEUTRAL"]).where(card_set: "OG")
+                  ]
+                end
 
     # コスト
     cost  = cli.ask('コストは？  ', Integer) {|q| q.in = MANA_COST_RANGE }
