@@ -27,7 +27,7 @@ end
 # main
 if __FILE__ == $0
   MANA_COST_RANGE  = 0..25
-  HIGHLANDER       = false
+  HIGHLANDER       = true
   HEROES           = %w(DRUID HUNTER MAGE PALADIN PRIEST ROGUE SHAMAN WARLOCK WARRIOR)
   LIMIT_DECK_QTY   = 30
   LIMIT_CARD_QTY   = HIGHLANDER ? (1..1) : (1..2)
@@ -123,7 +123,7 @@ if __FILE__ == $0
 
     # セット
     card_set = cards.first.card_set
-    condition[card_set][rarity] += 1
+    condition[card_set][rarity] += qty
     error_messages.push("【エラー】デッキにクラッシクのレアが#{condition['EXPERT1']['RARE']}枚存在します。") if condition["EXPERT1"]["RARE"] > 2
 
     nil
