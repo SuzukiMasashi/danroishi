@@ -29,7 +29,7 @@ if __FILE__ == $0
   MANA_COST_RANGE  = 0..25
   HIGHLANDER       = false
   HEROES           = %w(DRUID HUNTER MAGE PALADIN PRIEST ROGUE SHAMAN WARLOCK WARRIOR)
-  LIMIT_DECK_QTY   = 3
+  LIMIT_DECK_QTY   = 30
   LIMIT_CARD_QTY   = HIGHLANDER ? (1..1) : (1..2)
 
   # Highline Client
