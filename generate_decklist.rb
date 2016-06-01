@@ -100,7 +100,7 @@ if __FILE__ == $0
 
   # クラス
   classes = cards.uniq {|card| card.card_class }
-  hero    = classes - %w(NEUTRAL)
+  hero    = classes.map(&:card_class) - %w(NEUTRAL)
   unless (0..1).cover?(hero.count)
     cli.say("【エラー】")
     cli.say("【エラー】デッキのカードクラスが中立以外に複数存在しております。")
