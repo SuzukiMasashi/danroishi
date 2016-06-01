@@ -124,7 +124,7 @@ if __FILE__ == $0
     # セット
     card_set = cards.first.card_set
     condition[card_set][rarity] += qty
-    error_messages.push("【エラー】デッキにクラッシクのレアが#{condition['EXPERT1']['RARE']}枚存在します。") if condition["EXPERT1"]["RARE"] > 2
+    error_messages |= ["【エラー】デッキにクラッシクのレアが#{condition['EXPERT1']['RARE']}枚存在します。"] if condition["EXPERT1"]["RARE"] > 2
 
     nil
   end
