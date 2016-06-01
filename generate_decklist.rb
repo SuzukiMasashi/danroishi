@@ -29,7 +29,7 @@ if __FILE__ == $0
   MANA_COST_RANGE  = 0..25
   HIGHLANDER       = false
   HEROES           = %w(DRUID HUNTER MAGE PALADIN PRIEST ROGUE SHAMAN WARLOCK WARRIOR)
-  LIMIT_DECK_QTY   = 30
+  LIMIT_DECK_QTY   = 3
   LIMIT_CARD_QTY   = HIGHLANDER ? (1..1) : (1..2)
 
   # Highline Client
@@ -122,9 +122,9 @@ if __FILE__ == $0
     # セット
     card_set = cards.first.card_set
     condition[card_set][rarity] += qty
-    error_messages.push("【エラー】デッキに旧神のレジェンドが#{condition['OG']['LEGENDARY']}枚存在します。") if condition["OG"]["LEGENDARY"] > 1
-    error_messages.push("【エラー】デッキに旧神のエピックが#{condition['OG']['EPIC']}枚存在します。")        if condition["OG"]["EPIC"] > 1
-    error_messages.push("【エラー】デッキに旧神のレアが#{condition['OG']['RARE']}枚存在します。")            if condition["OG"]["RARE"] > 4
+    error_messages |= ["【エラー】デッキに旧神のレジェンドが#{condition['OG']['LEGENDARY']}枚存在します。"] if condition["OG"]["LEGENDARY"] > 1
+    error_messages |= ["【エラー】デッキに旧神のエピックが#{condition['OG']['EPIC']}枚存在します。"]        if condition["OG"]["EPIC"] > 1
+    error_messages |= ["【エラー】デッキに旧神のレアが#{condition['OG']['RARE']}枚存在します。"]            if condition["OG"]["RARE"] > 4
 
     nil
   end
